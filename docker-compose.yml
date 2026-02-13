@@ -13,9 +13,9 @@ services:
     ports:
       - "4000:4000"
     environment:
+      PUBLIC_BASE_URL: https://mooned-delia-hyperexcitably.ngrok-free.dev
       PORT: 4000
       MONGO_URI: mongodb://mongo:27017/test
-      PUBLIC_BASE_URL: http://localhost:4000
       VISITOR_SALT: change-me
       GEOLITE2_DB_PATH: /app/geo/GeoLite2-City.mmdb
     volumes:

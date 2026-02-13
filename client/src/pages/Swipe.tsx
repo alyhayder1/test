@@ -28,7 +28,12 @@ export default function Swipe() {
         }
 
         const json = await res.json();
-        setPage(json);
+        const bust = `v=${Date.now()}`;
+        setPage({
+          ...json,
+          photoUrl: json.photoUrl ? `${json.photoUrl}${json.photoUrl.includes("?") ? "&" : "?"}${bust}` : "",
+          audioUrl: json.audioUrl ? `${json.audioUrl}${json.audioUrl.includes("?") ? "&" : "?"}${bust}` : "",
+        });
 
         // log visit (don’t block UI)
         apiFetch("/visits", {

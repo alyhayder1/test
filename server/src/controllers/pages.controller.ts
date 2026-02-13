@@ -14,8 +14,12 @@ export async function createPage(req: any, res: any) {
   const photoFile = files?.photo?.[0];
   const audioFile = files?.audio?.[0];
 
-  const photoUrl = photoFile ? `${baseUrl}/uploads/${photoFile.filename}` : "";
-  const audioUrl = audioFile ? `${baseUrl}/uploads/${audioFile.filename}` : "";
+  const isNgrok = baseUrl.includes("ngrok");
+
+  const skip = isNgrok ? "?ngrok-skip-browser-warning=true" : "";
+
+  const photoUrl = photoFile ? `${baseUrl}/uploads/${photoFile.filename}${skip}` : "";
+  const audioUrl = audioFile ? `${baseUrl}/uploads/${audioFile.filename}${skip}` : "";
 
 
   const page = await Page.create({
