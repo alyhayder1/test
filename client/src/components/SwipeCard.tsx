@@ -90,7 +90,7 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
 
     fetch(`${import.meta.env.VITE_API_BASE}/right-swipes`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
       body: JSON.stringify({ slug: window.location.pathname.split("/").pop() }),
     }).catch(() => {});
 

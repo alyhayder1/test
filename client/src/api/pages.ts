@@ -13,7 +13,7 @@ export type Page = {
 export function createPage(body: Partial<Page>) {
   return api<{ slug: string }>("/pages", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
     body: JSON.stringify(body),
   });
 }
@@ -25,7 +25,7 @@ export function getPage(slug: string) {
 export function trackVisit(slug: string, path: string) {
   return api<{ visitId: string }>("/visits", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
     body: JSON.stringify({ slug, path }),
   });
 }

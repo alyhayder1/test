@@ -34,7 +34,7 @@ export default function Swipe() {
         // log visit (don’t block UI)
         fetch(`${API}/visits`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
           body: JSON.stringify({ slug, path: window.location.pathname }),
         }).catch(() => {});
       } catch {
