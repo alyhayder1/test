@@ -1,0 +1,42 @@
+# ===== Node =====
+node_modules/
+**/node_modules/
+
+# ===== Build outputs =====
+client/dist/
+server/dist/
+build/
+dist/
+
+# ===== Environment variables =====
+.env
+.env.*
+server/.env
+client/.env
+
+# ===== Logs =====
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ===== OS files =====
+.DS_Store
+Thumbs.db
+
+# ===== Mongo / local data =====
+mongo-data/
+data/
+db/
+*.wt
+*.lock
+
+# ===== Uploads (important) =====
+server/uploads/
+
+# ===== Geo database (large + licensed) =====
+server/geo/GeoLite2-City.mmdb
+
+# ===== Vite cache =====
+client/.vite/

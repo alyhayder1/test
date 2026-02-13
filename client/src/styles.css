@@ -1,0 +1,3 @@
+body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; }
+input, textarea { width: 100%; padding: 10px; margin: 6px 0 12px; }
+button { padding: 10px 14px; cursor: pointer; }
