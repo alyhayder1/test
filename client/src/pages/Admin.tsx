@@ -1,8 +1,6 @@
 import { useState } from "react";
 import { apiFetch } from "../lib/api";
 
-const API = import.meta.env.VITE_API_BASE;
-
 export default function Admin() {
   const [name, setName] = useState("Ali");
   const [age, setAge] = useState(25);
@@ -23,7 +21,7 @@ export default function Admin() {
     if (photo) fd.append("photo", photo);
     if (audio) fd.append("audio", audio);
 
-    const res = await apiFetch(`${API}/pages`, { method: "POST", body: fd });
+    const res = await apiFetch("/pages", { method: "POST", body: fd });
     const json = await res.json();
     setCreatedUrl(`${window.location.origin}/v/${json.slug}`);
   }

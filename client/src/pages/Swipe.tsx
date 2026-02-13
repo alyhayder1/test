@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import SwipeCard from "../components/SwipeCard";
-
-const API = import.meta.env.VITE_API_BASE;
+import { apiFetch } from "../lib/api";
 
 export default function Swipe() {
   const { slug } = useParams();
@@ -17,7 +16,7 @@ export default function Swipe() {
         setError("");
         setPage(null);
 
-        const res = await fetch(`${API}/pages/${slug}`);
+        const res = await apiFetch(`/pages/${slug}`);
 
         if (res.status === 404) {
           setError("Card not found");
@@ -32,9 +31,8 @@ export default function Swipe() {
         setPage(json);
 
         // log visit (don’t block UI)
-        fetch(`${API}/visits`, {
+        apiFetch("/visits", {
           method: "POST",
-          headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
           body: JSON.stringify({ slug, path: window.location.pathname }),
         }).catch(() => {});
       } catch {
