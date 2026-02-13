@@ -360,9 +360,14 @@ const styles: Record<string, React.CSSProperties> = {
     background:
       "radial-gradient(1200px 600px at 20% 10%, #2a1747 0%, transparent 55%), radial-gradient(1000px 700px at 80% 30%, #0b4a7d 0%, transparent 60%), linear-gradient(180deg, #0b0b12, #141425)",
     color: "#e5e7eb",
-    display: "grid",
-    placeItems: "center",
-    padding: 18,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-start",   // 👈 instead of center
+    paddingTop: 60,                  // 👈 pushes card higher
+    paddingBottom: 20,
+    paddingLeft: 18,
+    paddingRight: 18,
     overflow: "hidden",
   },
   canvas: { position: "fixed", inset: 0, pointerEvents: "none" },
@@ -456,19 +461,23 @@ const styles: Record<string, React.CSSProperties> = {
   overlay: {
     position: "fixed",
     inset: 0,
-    display: "grid",
-    placeItems: "center",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20, // 👈 adds safe space from screen edges
     background:
       "radial-gradient(800px 500px at 50% 20%, #ff5fa230 0%, transparent 60%), linear-gradient(180deg, #00000088, #000000cc)",
   },
+
   modal: {
-    width: "min(520px, 92vw)",
+    width: "100%",
+    maxWidth: 460,   // 👈 desktop limit
     borderRadius: 26,
     border: "1px solid #ffffff26",
     background: "#0b1225cc",
     boxShadow: "0 20px 90px #000000aa",
     backdropFilter: "blur(14px)",
-    padding: 18,
+    padding: 22,     // 👈 a bit more breathing room
     textAlign: "center",
   },
   big: { fontSize: 34, margin: "10px 0" },
