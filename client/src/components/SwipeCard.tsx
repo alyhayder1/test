@@ -19,6 +19,7 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
   const startYRef = useRef(0);
   const draggingRef = useRef(false);
   const audioUnlockedRef = useRef(false);
+  const retriedRef = useRef(false);
 
 
   const [dx, setDx] = useState(0);
@@ -291,6 +292,8 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
             decoding="async"
             crossOrigin="anonymous"
             onError={() => {
+              if (retriedRef.current) return;
+              retriedRef.current = true;
               const bust = `v=${Date.now()}`;
               setImgSrc(photoUrl + (photoUrl.includes("?") ? "&" : "?") + bust);
             }}

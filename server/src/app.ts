@@ -8,28 +8,15 @@ import { errorHandler } from "./middleware/errorHandler";
 
 export function createApp() {
   const app = express();
-
-  app.use(
-    "/uploads",
-    express.static(path.join(process.cwd(), "uploads"), {
-      etag: false,
-      lastModified: true,
-      maxAge: 0,
-      setHeaders(res, filePath) {
-        // Avoid Safari “blank until refresh” caching quirks
-        res.setHeader("Cache-Control", "no-store");
-
-        // Ensure correct content types for audio (helps iOS)
-        if (filePath.endsWith(".mp3")) res.setHeader("Content-Type", "audio/mpeg");
-        if (filePath.endsWith(".m4a")) res.setHeader("Content-Type", "audio/mp4");
-        if (filePath.endsWith(".jpg") || filePath.endsWith(".jpeg")) res.setHeader("Content-Type", "image/jpeg");
-        if (filePath.endsWith(".png")) res.setHeader("Content-Type", "image/png");
-
-        // Some clients/tunnels behave better with this
-        res.setHeader("Accept-Ranges", "bytes");
-      },
-    })
-  );
+  app.use("/uploads", (req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Range, Content-Type, Accept");
+    res.setHeader("Access-Control-Expose-Headers", "Content-Length, Content-Range, Accept-Ranges");
+    if (req.method === "OPTIONS") return res.sendStatus(204);
+    next();
+  });
+  app.use("/uploads", express.static(path.resolve("uploads")));
   app.set("trust proxy", true);
   app.use(cors());
   app.use(express.json());

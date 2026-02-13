@@ -13,7 +13,7 @@ services:
     ports:
       - "4000:4000"
     environment:
-      PUBLIC_BASE_URL: https://mooned-delia-hyperexcitably.ngrok-free.dev
+      PUBLIC_BASE_URL: https://assessed-eugene-observed-purse.trycloudflare.com
       PORT: 4000
       MONGO_URI: mongodb://mongo:27017/test
       VISITOR_SALT: change-me
