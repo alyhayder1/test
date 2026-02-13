@@ -26,6 +26,14 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
   const [dragging, setDragging] = useState(false);
   const [overlay, setOverlay] = useState(false);
   const [toast, setToast] = useState<string>("");
+  const [imgSrc, setImgSrc] = useState(photoUrl);
+
+  useEffect(() => {
+    if (!photoUrl) return;
+    // Safari: avoid occasional blank cached response
+    const bust = `v=${Date.now()}`;
+    setImgSrc(photoUrl + (photoUrl.includes("?") ? "&" : "?") + bust);
+  }, [photoUrl]);
 
   const threshold = 120;
 
@@ -60,9 +68,14 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
     }
 
   function replayMusic() {
-    if (!audioRef.current) return;
-    audioRef.current.currentTime = 0;   // rewind to start
-    audioRef.current.play().catch(() => {});
+    const a = audioRef.current;
+    if (!a) return;
+    try {
+      a.pause();
+      a.currentTime = 0;
+      a.load(); // ✅ important for mobile Safari/Chrome sometimes
+      a.play().catch(() => {});
+    } catch {}
   }
 
   function resetCard() {
@@ -81,23 +94,30 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
     setDy(-50);
     setDragging(false);
 
-    // ✅ MUST happen immediately inside the gesture call stack
-    if (audioRef.current) {
-        audioRef.current.currentTime = 0;
-        audioRef.current.volume = 0.75;
-        audioRef.current.play().catch(() => {});
+    // 🔊 Mobile-safe audio play (Safari/Chrome)
+    const a = audioRef.current;
+    if (a) {
+      try {
+        a.pause();
+        a.currentTime = 0;
+        a.load();              // ✅ IMPORTANT for mobile browsers
+        a.volume = 0.75;
+        a.play().catch(() => {});
+      } catch {}
     }
 
-    fetch(`${import.meta.env.VITE_API_BASE}/right-swipes`, {
+    // ✅ Log right swipe (use apiFetch, not raw fetch)
+    fetch("/right-swipes", {
       method: "POST",
-      headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
-      body: JSON.stringify({ slug: window.location.pathname.split("/").pop() }),
+      body: JSON.stringify({
+        slug: window.location.pathname.split("/").pop(),
+      }),
     }).catch(() => {});
 
     // UI can be delayed
     window.setTimeout(() => {
-        setOverlay(true);
-        startHearts();
+      setOverlay(true);
+      startHearts();
     }, 160);
   }
 
@@ -258,7 +278,18 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
         }}
       >
         <div style={styles.photoWrap}>
-          <img src={photoUrl} alt="profile" style={styles.photo} />
+          <img
+            src={imgSrc}
+            alt="profile"
+            style={styles.photo}
+            loading="eager"
+            decoding="async"
+            onError={() => {
+              // retry once with a fresh cache buster
+              const bust = `v=${Date.now()}`;
+              setImgSrc(photoUrl + (photoUrl.includes("?") ? "&" : "?") + bust);
+            }}
+          />
           <div style={styles.badge}>
             <span style={styles.dot} /> Last online an hour ago
           </div>
