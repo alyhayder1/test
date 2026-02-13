@@ -21,6 +21,9 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
   const audioUnlockedRef = useRef(false);
   const retriedRef = useRef(false);
 
+  const WHATSAPP_NUMBER = "923132196133";
+  const whatsappText = encodeURIComponent("Ali, I will give you the treat! <3");
+  const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${whatsappText}`;
 
   const [dx, setDx] = useState(0);
   const [dy, setDy] = useState(0);
@@ -341,9 +344,14 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
               <button onClick={replayMusic} style={styles.pill}>
                 🔊 Turn music on
               </button>
-              <button onClick={() => window.location.reload()} style={styles.pill}>
+              <a
+                href={whatsappUrl}
+                target="_blank"
+                rel="noreferrer"
+                style={{ ...styles.pill, textDecoration: "none", display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+              >
                 😊 Let's chat
-              </button>
+              </a>
             </div>
           </div>
         </div>
