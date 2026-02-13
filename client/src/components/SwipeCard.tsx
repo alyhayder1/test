@@ -26,11 +26,10 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
   const [dragging, setDragging] = useState(false);
   const [overlay, setOverlay] = useState(false);
   const [toast, setToast] = useState<string>("");
-  const [imgSrc, setImgSrc] = useState(photoUrl);
+  const [imgSrc, setImgSrc] = useState("");
 
   useEffect(() => {
     if (!photoUrl) return;
-    // Safari: avoid occasional blank cached response
     const bust = `v=${Date.now()}`;
     setImgSrc(photoUrl + (photoUrl.includes("?") ? "&" : "?") + bust);
   }, [photoUrl]);
@@ -120,6 +119,12 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
       startHearts();
     }, 160);
   }
+
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a || !audioUrl) return;
+    a.load();
+  }, [audioUrl]);
 
   function rejectNo() {
     // "No" is disabled -> playful bounce
@@ -279,13 +284,13 @@ export default function SwipeCard({ name, age, city, bio, photoUrl, audioUrl }: 
       >
         <div style={styles.photoWrap}>
           <img
-            src={imgSrc}
+            src={imgSrc || photoUrl}
             alt="profile"
             style={styles.photo}
             loading="eager"
             decoding="async"
+            crossOrigin="anonymous"
             onError={() => {
-              // retry once with a fresh cache buster
               const bust = `v=${Date.now()}`;
               setImgSrc(photoUrl + (photoUrl.includes("?") ? "&" : "?") + bust);
             }}
